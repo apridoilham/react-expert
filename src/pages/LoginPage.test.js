@@ -6,23 +6,20 @@ import LoginPage from './LoginPage'
 
 // --- PERBAIKAN MOCK DIMULAI ---
 
-// 1. Ambil implementasi asli, GUNAKAN PREFIX 'mock'
-const mockActualAuthUserSlice = jest.requireActual('../states/authUserSlice')
-
-// 2. Mock modulnya
+// 1. Mock modulnya. Panggil requireActual LANGSUNG DI DALAM factory.
 jest.mock('../states/authUserSlice', () => ({
-  __esModule: true, // <-- Penting untuk ES Modules
-  ...mockActualAuthUserSlice, // <-- Gunakan variabel ber-prefix 'mock'
-  default: mockActualAuthUserSlice.default, // <-- Gunakan variabel ber-prefix 'mock'
-  asyncLoginUser: jest.fn(() => ({ // <-- Timpa HANYA asyncLoginUser
+  __esModule: true,
+  ...jest.requireActual('../states/authUserSlice'),
+  default: jest.requireActual('../states/authUserSlice').default,
+  asyncLoginUser: jest.fn(() => ({
     unwrap: jest.fn(() => Promise.resolve()),
   })),
 }))
 
-// 3. Sekarang impor reducer-nya
+// 2. Sekarang impor reducer-nya (setelah mock)
 import authUserReducer from '../states/authUserSlice'
 
-// 4. Buat store dengan reducer yang valid
+// 3. Buat store dengan reducer yang valid
 const mockStore = configureStore({
   reducer: {
     authUser: authUserReducer,
