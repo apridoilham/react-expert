@@ -84,6 +84,7 @@ const authUserSlice = createSlice({
       .addCase(asyncLoginUser.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.payload
+        state.value = null // <-- TAMBAHKAN BARIS INI
       })
 
       .addCase(asyncPreloadProcess.pending, (state) => {
