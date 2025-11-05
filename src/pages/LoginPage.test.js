@@ -2,24 +2,39 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import { configureStore } from '@reduxjs/toolkit'
-import authUserReducer from '../states/authUserSlice'
 import LoginPage from './LoginPage'
 
+// --- PERBAIKAN MOCK DIMULAI ---
+
+// 1. Ambil implementasi asli dari slice
+const actualAuthUserSlice = jest.requireActual('../states/authUserSlice')
+
+// 2. Mock modulnya
 jest.mock('../states/authUserSlice', () => ({
-  ...jest.requireActual('../states/authUserSlice'),
-  asyncLoginUser: jest.fn(() => ({
+  __esModule: true, // <-- Penting untuk ES Modules
+  ...actualAuthUserSlice, // <-- Gunakan semua ekspor asli (termasuk asyncRegisterUser, dll.)
+  default: actualAuthUserSlice.default, // <-- Gunakan REDUCER asli sebagai default export
+  asyncLoginUser: jest.fn(() => ({ // <-- Timpa HANYA asyncLoginUser
     unwrap: jest.fn(() => Promise.resolve()),
   })),
 }))
 
+// 3. Sekarang impor reducer-nya (yang sekarang sudah menunjuk ke reducer asli)
+import authUserReducer from '../states/authUserSlice'
+
+// 4. Buat store dengan reducer yang valid
 const mockStore = configureStore({
   reducer: {
     authUser: authUserReducer,
   },
 })
 
+// --- PERBAIKAN MOCK SELESAI ---
+
 describe('LoginPage Component', () => {
   beforeEach(() => {
+    // Reset mock sebelum setiap tes
+    jest.clearAllMocks()
     render(
       <Provider store={mockStore}>
         <BrowserRouter>
@@ -48,6 +63,7 @@ describe('LoginPage Component', () => {
   })
 
   it('should dispatch asyncLoginUser on form submit', async () => {
+    // Ambil thunk yang sudah di-mock
     const { asyncLoginUser } = require('../states/authUserSlice')
 
     const emailInput = screen.getByLabelText(/email/i)
