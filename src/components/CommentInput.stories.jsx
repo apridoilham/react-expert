@@ -1,21 +1,16 @@
 import React from 'react'
 import CommentInput from './CommentInput'
-import { Provider } from 'react-redux'
-import { configureStore } from '@reduxjs/toolkit'
-import { BrowserRouter } from 'react-router-dom'
+// Hapus Provider, configureStore, dan BrowserRouter
 
 export default {
   title: 'Components/CommentInput',
   component: CommentInput,
   decorators: [
     (Story) => (
-      <Provider store={store}>
-        <BrowserRouter>
-          <div style={{ backgroundColor: '#0f0f12', padding: '2rem' }}>
-            <Story />
-          </div>
-        </BrowserRouter>
-      </Provider>
+      // Hapus wrapper Provider dan BrowserRouter
+      <div style={{ backgroundColor: '#0f0f12', padding: '2rem' }}>
+        <Story />
+      </div>
     ),
   ],
   argTypes: {
@@ -23,13 +18,13 @@ export default {
   },
 }
 
-const store = configureStore({
-  reducer: {},
-})
+// Hapus mock store
 
 const Template = (args) => <CommentInput {...args} />
 
 export const Default = Template.bind({})
 Default.args = {
-  onAddComment: () => {},
+  onAddComment: () => {
+    console.log('Comment Submitted!')
+  },
 }

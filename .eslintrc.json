@@ -4,15 +4,9 @@
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:prettier/recommended",
-    "plugin:storybook/recommended",
-    "plugin:storybook/recommended",
     "plugin:storybook/recommended"
   ],
-  "plugins": [
-    "react",
-    "react-hooks",
-    "react-refresh"
-  ],
+  "plugins": ["react", "react-hooks", "react-refresh"],
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module",
