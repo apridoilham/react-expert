@@ -1,5 +1,3 @@
-// cypress/e2e/login.cy.js
-
 describe('Login Flow', () => {
   beforeEach(() => {
     cy.visit('/')
@@ -23,8 +21,8 @@ describe('Login Flow', () => {
   })
 
   it('should login successfully with correct credentials', () => {
-    cy.get('input[id="email"]').type('test@example.com')
-    cy.get('input[id="password"]').type('password123')
+    cy.get('input[id="email"]').type('akun-valid@email.com')
+    cy.get('input[id="password"]').type('password-valid')
     cy.get('button[type="submit"]').click()
 
     cy.url().should('eq', 'http://localhost:5173/')
