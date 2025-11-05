@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
@@ -44,8 +43,8 @@ describe('LoginPage Component', () => {
 
   it('should handle password input changes', () => {
     const passwordInput = screen.getByLabelText(/password/i)
-    fireEvent.change(passwordInput, { target: { value: 'password123' } })
-    expect(passwordInput.value).toBe('password123')
+    fireEvent.change(passwordInput, { target: { value: 'password10' } })
+    expect(passwordInput.value).toBe('password10')
   })
 
   it('should dispatch asyncLoginUser on form submit', async () => {
@@ -56,12 +55,12 @@ describe('LoginPage Component', () => {
     const loginButton = screen.getByRole('button', { name: /login/i })
 
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
-    fireEvent.change(passwordInput, { target: { value: 'password123' } })
+    fireEvent.change(passwordInput, { target: { value: 'password10' } })
     fireEvent.click(loginButton)
 
     await expect(asyncLoginUser).toHaveBeenCalledWith({
       email: 'test@example.com',
-      password: 'password123',
+      password: 'password10',
     })
   })
 })

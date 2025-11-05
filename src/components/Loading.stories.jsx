@@ -1,18 +1,24 @@
-import React from 'react'
 import Loading from './Loading'
-// Hapus Provider, configureStore, dan BrowserRouter
+import { Provider } from 'react-redux'
+import { configureStore } from '@reduxjs/toolkit'
+import { BrowserRouter } from 'react-router-dom'
 
-// Hapus mock store
+const store = configureStore({
+  reducer: {},
+})
 
 export default {
   title: 'Components/Loading',
   component: Loading,
   decorators: [
     (Story) => (
-      // Hapus wrapper Provider dan BrowserRouter
-      <div style={{ backgroundColor: '#0f0f12', padding: '2rem' }}>
-        <Story />
-      </div>
+      <Provider store={store}>
+        <BrowserRouter>
+          <div style={{ backgroundColor: '#0f0f12', padding: '2rem' }}>
+            <Story />
+          </div>
+        </BrowserRouter>
+      </Provider>
     ),
   ],
 }
