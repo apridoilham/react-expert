@@ -1,44 +1,40 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, useNavigate } from 'react-router-dom' // <-- Impor useNavigate
 import { configureStore } from '@reduxjs/toolkit'
 import LoginPage from './LoginPage'
 
+// --- MOCK react-router-dom ---
+const mockNavigate = jest.fn()
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate, // <-- Timpa useNavigate
+}))
+// --- END MOCK ---
+
+// --- MOCK authUserSlice ---
 jest.mock('../states/authUserSlice', () => ({
   __esModule: true,
   ...jest.requireActual('../states/authUserSlice'),
   default: jest.requireActual('../states/authUserSlice').default,
-
-  // INI ADALAH MOCK YANG BENAR
   asyncLoginUser: jest.fn((payload) => (dispatch, getState) => {
-    // createAsyncThunk mengembalikan thunk
-    // Thunk ini mengembalikan promise yang memiliki .unwrap()
-    const promise = Promise.resolve({
-      /* payload palsu jika dibutuhkan */
-    })
-    promise.unwrap = () =>
-      Promise.resolve({
-        /* payload palsu dari unwrap jika dibutuhkan */
-      })
+    const promise = Promise.resolve({})
+    promise.unwrap = () => Promise.resolve({})
     return promise
   }),
 }))
+// --- END MOCK ---
 
-// Sekarang impor reducer-nya (setelah mock)
 import authUserReducer from '../states/authUserSlice'
 
-// Buat store dengan reducer yang valid
 const mockStore = configureStore({
   reducer: {
     authUser: authUserReducer,
   },
 })
 
-// --- PERBAIKAN MOCK SELESAI ---
-
 describe('LoginPage Component', () => {
   beforeEach(() => {
-    // Reset mock sebelum setiap tes
     jest.clearAllMocks()
     render(
       <Provider store={mockStore}>
@@ -67,8 +63,7 @@ describe('LoginPage Component', () => {
     expect(passwordInput.value).toBe('password10')
   })
 
-  it('should dispatch asyncLoginUser on form submit', async () => {
-    // Ambil thunk yang sudah di-mock
+  it('should dispatch asyncLoginUser and navigate on form submit', async () => {
     const { asyncLoginUser } = require('../states/authUserSlice')
 
     const emailInput = screen.getByLabelText(/email/i)
@@ -79,10 +74,18 @@ describe('LoginPage Component', () => {
     fireEvent.change(passwordInput, { target: { value: 'password10' } })
     fireEvent.click(loginButton)
 
-    // Tes ini sekarang akan lolos
+    // Tunggu tes selesai
     await expect(asyncLoginUser).toHaveBeenCalledWith({
       email: 'test@example.com',
       password: 'password10',
+    })
+    
+    // PERIKSA NAVIGASI (Perbaikan untuk 'act')
+    // Kita perlu menunggu promise di 'unwrap().then()' selesai
+    // Cara termudah adalah membungkusnya dalam 'waitFor'
+    const { waitFor } = require('@testing-library/react')
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/')
     })
   })
 })
