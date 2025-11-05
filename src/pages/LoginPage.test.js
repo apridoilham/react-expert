@@ -4,22 +4,30 @@ import { BrowserRouter } from 'react-router-dom'
 import { configureStore } from '@reduxjs/toolkit'
 import LoginPage from './LoginPage'
 
-// --- PERBAIKAN MOCK DIMULAI ---
-
-// 1. Mock modulnya. Panggil requireActual LANGSUNG DI DALAM factory.
 jest.mock('../states/authUserSlice', () => ({
   __esModule: true,
   ...jest.requireActual('../states/authUserSlice'),
   default: jest.requireActual('../states/authUserSlice').default,
-  asyncLoginUser: jest.fn(() => ({
-    unwrap: jest.fn(() => Promise.resolve()),
-  })),
+
+  // INI ADALAH MOCK YANG BENAR
+  asyncLoginUser: jest.fn((payload) => (dispatch, getState) => {
+    // createAsyncThunk mengembalikan thunk
+    // Thunk ini mengembalikan promise yang memiliki .unwrap()
+    const promise = Promise.resolve({
+      /* payload palsu jika dibutuhkan */
+    })
+    promise.unwrap = () =>
+      Promise.resolve({
+        /* payload palsu dari unwrap jika dibutuhkan */
+      })
+    return promise
+  }),
 }))
 
-// 2. Sekarang impor reducer-nya (setelah mock)
+// Sekarang impor reducer-nya (setelah mock)
 import authUserReducer from '../states/authUserSlice'
 
-// 3. Buat store dengan reducer yang valid
+// Buat store dengan reducer yang valid
 const mockStore = configureStore({
   reducer: {
     authUser: authUserReducer,
@@ -71,6 +79,7 @@ describe('LoginPage Component', () => {
     fireEvent.change(passwordInput, { target: { value: 'password10' } })
     fireEvent.click(loginButton)
 
+    // Tes ini sekarang akan lolos
     await expect(asyncLoginUser).toHaveBeenCalledWith({
       email: 'test@example.com',
       password: 'password10',
