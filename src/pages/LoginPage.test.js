@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
-import { BrowserRouter, useNavigate } from 'react-router-dom' // <-- Impor useNavigate
+import { BrowserRouter } from 'react-router-dom' // <-- useNavigate DIHAPUS DARI SINI
 import { configureStore } from '@reduxjs/toolkit'
 import LoginPage from './LoginPage'
 
@@ -8,7 +8,7 @@ import LoginPage from './LoginPage'
 const mockNavigate = jest.fn()
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate, // <-- Timpa useNavigate
+  useNavigate: () => mockNavigate, // <-- Mock ini akan tetap berfungsi
 }))
 // --- END MOCK ---
 
@@ -74,15 +74,11 @@ describe('LoginPage Component', () => {
     fireEvent.change(passwordInput, { target: { value: 'password10' } })
     fireEvent.click(loginButton)
 
-    // Tunggu tes selesai
     await expect(asyncLoginUser).toHaveBeenCalledWith({
       email: 'test@example.com',
       password: 'password10',
     })
-    
-    // PERIKSA NAVIGASI (Perbaikan untuk 'act')
-    // Kita perlu menunggu promise di 'unwrap().then()' selesai
-    // Cara termudah adalah membungkusnya dalam 'waitFor'
+
     const { waitFor } = require('@testing-library/react')
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith('/')
