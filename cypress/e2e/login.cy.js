@@ -22,12 +22,14 @@ describe('Login Flow', () => {
 
   it('should login successfully with correct credentials', () => {
     // --- GANTI DI SINI ---
-    cy.get('input[id="email"]').type('aprido-tester@example.com') // <-- GANTI DENGAN EMAIL ASLI ANDA
-    cy.get('input[id="password"]').type('password123') // <-- GANTI DENGAN PASSWORD ASLI ANDA
+    // Gunakan email dan password yang BARU SAJA Anda daftarkan:
+    cy.get('input[id="email"]').type('akun-tester-ci@example.com')
+    cy.get('input[id="password"]').type('password123')
     // --- GANTI DI SINI ---
-    
+
     cy.get('button[type="submit"]').click()
 
+    // Tes ini sekarang akan berhasil karena login akan sukses
     cy.url().should('eq', 'http://localhost:5173/')
     cy.get('nav').should('contain', 'Halo,')
   })
