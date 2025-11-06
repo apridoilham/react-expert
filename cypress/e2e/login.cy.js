@@ -22,8 +22,8 @@ describe('Login Flow', () => {
 
   it('should login successfully with correct credentials', () => {
     // --- GANTI DI SINI DENGAN AKUN YANG SUDAH ANDA DAFTAR ---
-    cy.get('input[id="email"]').type('email-valid-anda@example.com') // <-- GANTI INI
-    cy.get('input[id="password"]').type('password-valid-anda') // <-- GANTI INI
+    cy.get('input[id="email"]').type('ido@gmail.com') // <-- GANTI INI
+    cy.get('input[id="password"]').type('ido123') // <-- GANTI INI
     // --- GANTI DI SINI ---
 
     cy.get('button[type="submit"]').click()
