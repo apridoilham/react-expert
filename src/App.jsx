@@ -43,7 +43,6 @@ function App() {
       </main>
     </div>
   )
-  console.log('ini tes gagal')
 }
 
 export default App
