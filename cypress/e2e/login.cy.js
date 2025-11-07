@@ -22,8 +22,8 @@ describe('Login Flow', () => {
 
   it('should login successfully with correct credentials', () => {
     // --- GANTI DI SINI DENGAN AKUN ASLI YANG ANDA BUAT ---
-    cy.get('input[id="email"]').type('tes-final-aprido@example.com') // <-- GANTI DENGAN EMAIL ASLI ANDA
-    cy.get('input[id="password"]').type('passwordfinal123') // <-- GANTI DENGAN PASSWORD ASLI ANDA
+    cy.get('input[id="email"]').type('apridoilham@gmail.com') // <-- GANTI DENGAN EMAIL ASLI ANDA
+    cy.get('input[id="password"]').type('apridoilham') // <-- GANTI DENGAN PASSWORD ASLI ANDA
     // --- GANTI DI SINI ---
 
     cy.get('button[type="submit"]').click()
